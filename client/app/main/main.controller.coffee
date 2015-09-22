@@ -37,7 +37,7 @@ angular.module 'voteApp'
     $http.delete '/api/pollss/' + poll._id
     .then (data) ->
       console.log "deleted poll #{poll._id}"
-      index = _($scope.polls).find((pollInArr) -> pollInArr._id == poll._id)
+      index = _($scope.polls).findIndex((pollInArr) -> pollInArr._id == poll._id)
       console.log "Index of object to delete: #{index}"
       $scope.polls.splice index, 1
     , (error) ->
