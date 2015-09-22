@@ -2,6 +2,46 @@
 
 angular.module 'voteApp'
 .controller 'MainCtrl', ($scope, $http) ->
+  $scope.showAll = false
+  $scope.poll =
+    title : ''
+    question : ''
+    answers : [
+      text : ''
+      amount : 0
+    ,
+      text : ''
+      amount : 0
+    ]
+
+  
+
+  $scope.toggleShowAll = ->
+    $scope.showAll = not $scope.showAll
+    console.log 'toggleShowAll'
+
+  $scope.polls = []
+ 
+
+  $scope.getAllPolls = ->
+    $http.get('/api/pollss').success (polls) ->
+      console.log 'accessing polls'
+      $scope.polls = polls
+
+  $scope.getAllPolls()
+
+  $scope.addPoll = ->
+    $http.post '/api/pollss', $scope.poll
+
+  $scope.deletePoll = (poll) ->
+    $http.delete '/api/pollss/' + poll._id
+    .then (data) ->
+      console.log "deleted poll #{poll._id}"
+      # $scope.polls.splice
+    , (error) ->
+      console.log "deletePoll Error: #{error}"
+
+###
   $scope.awesomeThings = []
 
   $http.get('/api/things').success (awesomeThings) ->
@@ -17,3 +57,4 @@ angular.module 'voteApp'
 
   $scope.deleteThing = (thing) ->
     $http.delete '/api/things/' + thing._id
+###

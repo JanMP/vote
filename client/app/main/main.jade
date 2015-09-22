@@ -2,22 +2,50 @@ div(ng-include='"components/navbar/navbar.html"')
 
 header#banner.hero-unit
   .container
-    h1 'Allo, 'Allo!
-    p.lead Kick-start your next web app with Angular Fullstack
-    img(src='assets/images/yeoman.png', alt='I\'m Yeoman')
+    h1 vote
+    p.lead a Basejump for freeCodeCamp
+    //img(src='assets/images/yeoman.png', alt='I\'m Yeoman')
 
-.container
+.container(ng-show='showAll')
   .row
     .col-lg-12
-      h1.page-header Features:
-      ul.nav.nav-tabs.nav-stacked.col-md-4.col-lg-4.col-sm-6(ng-repeat='thing in awesomeThings')
-        li
-          a(href='#', tooltip='{{thing.info}}')
-            | {{thing.name}}
+      h1.page-header Polls:
+      pollthump(ng-repeat='poll in polls')
+
+.container(ng-hide='showAll')
+  .row
+    .col-lg-12
+      h1.page-header New Poll:
+      form.form-horizontal
+        .form-group
+          label.col-sm-2.control-lable(for='title') Title:
+          .col-sm-10
+            input.form-control(type='text' id='title')
+        .form-group
+          label.col-sm-2.control-lable(for='question') Question:
+          .col-sm-10
+            input.form-control(type='text' id='question')
+        .form-group
+          label.col-sm-2.control-lable(for='answer') Answer A):
+          .col-sm-10
+            .input-group
+              input.form-control(type='text' id='anwer')
+              span.input-group-btn
+                button.btn.btn-default(type='button') -
+                button.btn.btn-default(type='button') +
+        .form-group
+          .col-sm-offset-2.col-sm-10.text-right
+            button.btn.btn-default(ng-click="toggleShowAll()") Submit
+    //
+      h1 Ersatztext
+      p This text is shown, when <var> showAll </var> is set to false.
+      button(ng-click="toggleShowAll()") Show All
 
 footer.footer
   .container
     p
+      | vote © 2015 Jan Pilgenröder
+    //
       | Angular Fullstack v2.1.1
       = ' | '
       a(href='https://twitter.com/tyhenkel') @tyhenkel

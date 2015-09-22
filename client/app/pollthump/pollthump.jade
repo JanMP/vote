@@ -1,0 +1,18 @@
+div.col-sm-6.col-md-4
+  h3 {{poll.title}}: 
+  h4 {{poll.question}}
+  table.table
+    tr(ng-repeat='answer in poll.answers')
+      td {{answer.text}}
+      td.text-right
+        strong{{answer.amount}}
+  div.text-center
+    button.btn.btn-default.btn-xs(ng-click="toggleShowAll()")
+      span.glyphicon.glyphicon-ok
+      |  Vote
+    button.btn.btn-default.btn-xs
+      span.glyphicon.glyphicon-pencil
+      |  Edit
+    button.btn.btn-default.btn-xs(ng-click="deletePoll(poll)")
+      span.glyphicon.glyphicon-trash
+      |  Delete
