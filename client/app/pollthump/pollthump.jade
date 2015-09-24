@@ -7,10 +7,10 @@ div.col-sm-6.col-md-4
       td.text-right
         strong{{answer.amount}}
   div.text-center
-    button.btn.btn-default.btn-xs(ng-click="toggleShowAll()")
+    button.btn.btn-default.btn-xs(ng-click="vote(poll)")
       span.glyphicon.glyphicon-ok
       |  Vote
-    button.btn.btn-default.btn-xs
+    button.btn.btn-default.btn-xs(ng-click="editPoll(poll)")
       span.glyphicon.glyphicon-pencil
       |  Edit
     button.btn.btn-default.btn-xs(ng-click="deletePoll(poll)")

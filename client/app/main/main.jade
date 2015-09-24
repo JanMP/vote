@@ -6,36 +6,36 @@ header#banner.hero-unit
     p.lead a Basejump for freeCodeCamp
     //img(src='assets/images/yeoman.png', alt='I\'m Yeoman')
 
-.container(ng-show='showAll')
+.container(ng-show='showListing')
   .row
     .col-lg-12
       h1.page-header Polls:
       pollthump(ng-repeat='poll in polls')
 
-.container(ng-hide='showAll')
+.container(ng-show='showEdit')
   .row
     .col-lg-12
-      h1.page-header New Poll:
-      form.form-horizontal
+      h1.page-header Edit Poll:
+      form.form-horizontal(novalidate)
         .form-group
           label.col-sm-2.control-lable(for='title') Title:
           .col-sm-10
-            input.form-control(type='text' id='title')
+            input.form-control(type='text' id='title' ng-model='poll.title')
         .form-group
           label.col-sm-2.control-lable(for='question') Question:
           .col-sm-10
-            input.form-control(type='text' id='question')
-        .form-group
+            input.form-control(type='text' id='question' ng-model='poll.question')
+        .form-group(ng-repeat='answer in poll.answers')
           label.col-sm-2.control-lable(for='answer') Answer A):
           .col-sm-10
             .input-group
-              input.form-control(type='text' id='anwer')
+              input.form-control(type='text' id='answer' ng-model='poll.answers[$index].text')
               span.input-group-btn
-                button.btn.btn-default(type='button') -
-                button.btn.btn-default(type='button') +
+                button.btn.btn-default(type='button' ng-click='deleteAnswer($index)') -
+                button.btn.btn-default(type='button' ng-click='addAnswer($index)') +
         .form-group
           .col-sm-offset-2.col-sm-10.text-right
-            button.btn.btn-default(ng-click="toggleShowAll()") Submit
+            button.btn.btn-default(ng-click="submit()") Submit
     //
       h1 Ersatztext
       p This text is shown, when <var> showAll </var> is set to false.
