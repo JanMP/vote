@@ -12,6 +12,23 @@ header#banner.hero-unit
       h1.page-header Polls:
       pollthump(ng-repeat='poll in polls')
 
+.container(ng-show='showBallot')
+  .row
+    .col-sm-6.center
+      h1.page-header Vote: {{poll.title}}
+      h4{{poll.question}}
+      form.form-horizontal(novalidate)
+        table.table
+          tr(ng-repeat='answer in poll.answers')
+            td {{answer.text}}
+            td.text-right
+              input(type='radio' name='answers' ng-value='$index' ng-model='dummy.selected')
+        .form-group
+          .col-sm-offset-2.col-sm-10.text-right
+            button.btn.btn-default(ng-click="switchToListing()") Cancel
+            button.btn.btn-default(ng-click="submit()") Ok
+
+
 .container(ng-show='showEdit')
   .row
     .col-lg-12
@@ -26,7 +43,7 @@ header#banner.hero-unit
           .col-sm-10
             input.form-control(type='text' id='question' ng-model='poll.question')
         .form-group(ng-repeat='answer in poll.answers')
-          label.col-sm-2.control-lable(for='answer') Answer A):
+          label.col-sm-2.control-lable(for='answer') Answer {{letter($index)}}:
           .col-sm-10
             .input-group
               input.form-control(type='text' id='answer' ng-model='poll.answers[$index].text')
@@ -35,7 +52,9 @@ header#banner.hero-unit
                 button.btn.btn-default(type='button' ng-click='addAnswer($index)') +
         .form-group
           .col-sm-offset-2.col-sm-10.text-right
-            button.btn.btn-default(ng-click="submit()") Submit
+            button.btn.btn-default(ng-click="switchToListing()") Cancel
+            button.btn.btn-default(ng-click="submit()") Ok
+
     //
       h1 Ersatztext
       p This text is shown, when <var> showAll </var> is set to false.

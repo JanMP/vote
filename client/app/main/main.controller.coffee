@@ -17,19 +17,33 @@ angular.module 'voteApp'
       amount : 0
     ]
 
+  $scope.polls = []
+  $scope.dummy = {}
+  $scope.dummy.selected = 0
+
+  $scope.letter = (n) ->
+    if n <= 25 then String.fromCharCode(n + 65) else n+1
+
   $scope.toggleShowAll = ->
     $scope.showListing = not $scope.showListing
     console.log 'toggleShowAll'
 
-  $scope.polls = []
- 
   $scope.switchToEditor = ->
     $scope.showEdit = true
     $scope.showListing = false
+    $scope.showBallot = false
 
   $scope.switchToListing = ->
     $scope.showEdit = false
     $scope.showListing = true
+    $scope.showBallot = false
+
+  $scope.switchToListing()
+
+  $scope.switchToBallot = ->
+    $scope.showEdit = false
+    $scope.showListing = false
+    $scope.showBallot = true
 
   $scope.getAllPolls = ->
     $http.get('/api/pollss').success (polls) ->
@@ -57,9 +71,16 @@ angular.module 'voteApp'
     , (error) ->
       console.log (error)
 
+  $scope.vote = (poll) ->
+    console.log "voting on poll #{poll._id}"
+    $scope.poll =  _.cloneDeep poll
+    $scope.dummy.selected = -1
+    $scope.switchToBallot()
+
   $scope.editPoll = (poll) ->
     console.log "editing poll #{poll._id}"
     $scope.poll =  _.cloneDeep poll
+    $scope.dummy.selected = -1
     $scope.switchToEditor()
 
   $scope.addAnswer = (index) ->
@@ -68,9 +89,11 @@ angular.module 'voteApp'
       amount : 0
 
   $scope.submit = ->
+    if $scope.dummy.selected >-1
+      $scope.poll.answers[$scope.dummy.selected].amount += 1
+      
     if not $scope.poll._id then $scope.addPoll() else $scope.updatePoll()
     $scope.switchToListing()
-
 
   $scope.deleteAnswer = (index) ->
     $scope.poll.answers.splice index, 1
