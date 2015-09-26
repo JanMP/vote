@@ -11,7 +11,9 @@ var answer = new Schema({
 var PollsSchema = new Schema({
   title: String,
   question: String,
-  answers: [answer]
+  creator : String,
+  answers: [answer],
+  haveVoted : [String]
 });
 
 module.exports = mongoose.model('Polls', PollsSchema);

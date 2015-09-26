@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'voteApp'
-.controller 'MainCtrl', ($scope, $http) ->
+.controller 'MainCtrl', ($scope, $http, Auth) ->
   
   $scope.showListing = true
   $scope.showEdit = true
@@ -9,6 +9,7 @@ angular.module 'voteApp'
   $scope.poll =
     title : ''
     question : ''
+    creator : ''
     answers : [
       text : ''
       amount : 0
@@ -16,10 +17,14 @@ angular.module 'voteApp'
       text : ''
       amount : 0
     ]
+    haveVoted: []
 
   $scope.polls = []
   $scope.dummy = {}
   $scope.dummy.selected = 0
+
+  $scope.getCurrentUser = Auth.getCurrentUser
+  $scope.isLoggedIn = Auth.isLoggedIn
 
   $scope.letter = (n) ->
     if n <= 25 then String.fromCharCode(n + 65) else n+1
@@ -28,10 +33,20 @@ angular.module 'voteApp'
     $scope.showListing = not $scope.showListing
     console.log 'toggleShowAll'
 
+  $scope.hasVoted = (poll) ->
+    _(poll.haveVoted).contains $scope.getCurrentUser()._id
+
+  $scope.mayVote = (poll) ->
+    if $scope.isLoggedIn() and not $scope.hasVoted poll then true
+
+  $scope.mayEdit = (poll) ->
+    if $scope.isLoggedIn() and poll.creator is $scope.getCurrentUser()._id then true
+
   $scope.switchToEditor = ->
-    $scope.showEdit = true
-    $scope.showListing = false
-    $scope.showBallot = false
+    if $scope.mayEdit $scope.poll
+      $scope.showEdit = true
+      $scope.showListing = false
+      $scope.showBallot = false
 
   $scope.switchToListing = ->
     $scope.showEdit = false
@@ -41,9 +56,10 @@ angular.module 'voteApp'
   $scope.switchToListing()
 
   $scope.switchToBallot = ->
-    $scope.showEdit = false
-    $scope.showListing = false
-    $scope.showBallot = true
+    if $scope.mayVote $scope.poll
+      $scope.showEdit = false
+      $scope.showListing = false
+      $scope.showBallot = true
 
   $scope.getAllPolls = ->
     $http.get('/api/pollss').success (polls) ->
@@ -60,7 +76,6 @@ angular.module 'voteApp'
       console.log data.data
     , (error) ->
       console.log "Error : #{error}"
-
 
   $scope.updatePoll = ->
     console.log 'updating poll'
@@ -91,6 +106,8 @@ angular.module 'voteApp'
   $scope.submit = ->
     if $scope.dummy.selected >-1
       $scope.poll.answers[$scope.dummy.selected].amount += 1
+      $scope.poll.haveVoted.push $scope.getCurrentUser()._id
+      console.log $scope.poll
       
     if not $scope.poll._id then $scope.addPoll() else $scope.updatePoll()
     $scope.switchToListing()
