@@ -10,7 +10,7 @@ header#banner.hero-unit
   .row
     .col-lg-12
       h1.page-header Polls:
-      button.btn.btn-default(ng-click='newPoll()') New Poll
+      button.btn.btn-default(ng-click='newPoll()' ng-disabled='!mayCreate()') New Poll
       pollthump(ng-repeat='poll in polls')
 
 .container(ng-show='showBallot')

@@ -42,11 +42,14 @@ angular.module 'voteApp'
     if $scope.isLoggedIn() and not $scope.hasVoted poll then true
 
   $scope.mayEdit = (poll) ->
-    $scope.isLoggedIn() and poll.creator is $scope.getCurrentUser()._id\
-    or poll.creator is ''
+    $scope.isLoggedIn() and poll.creator is $scope.getCurrentUser()._id
+
+  $scope.mayCreate = ->
+    $scope.isLoggedIn()
 
   $scope.switchToEditor = ->
-    if $scope.mayEdit $scope.poll
+    if $scope.mayEdit($scope.poll) or $scope.mayCreate()
+      if $scope.poll.creator = '' then $scope.poll.creator = $scope.getCurrentUser()._id
       $scope.showEdit = true
       $scope.showListing = false
       $scope.showBallot = false
