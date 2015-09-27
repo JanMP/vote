@@ -6,7 +6,7 @@ angular.module 'voteApp'
   $scope.showListing = true
   $scope.showEdit = true
   
-  $scope.poll =
+  Poll = ->
     title : ''
     question : ''
     creator : ''
@@ -18,6 +18,8 @@ angular.module 'voteApp'
       amount : 0
     ]
     haveVoted: []
+
+  $scope.poll = Poll()
 
   $scope.polls = []
   $scope.dummy = {}
@@ -40,7 +42,8 @@ angular.module 'voteApp'
     if $scope.isLoggedIn() and not $scope.hasVoted poll then true
 
   $scope.mayEdit = (poll) ->
-    if $scope.isLoggedIn() and poll.creator is $scope.getCurrentUser()._id then true
+    $scope.isLoggedIn() and poll.creator is $scope.getCurrentUser()._id\
+    or poll.creator is ''
 
   $scope.switchToEditor = ->
     if $scope.mayEdit $scope.poll
@@ -98,6 +101,10 @@ angular.module 'voteApp'
     $scope.dummy.selected = -1
     $scope.switchToEditor()
 
+  $scope.newPoll = ->
+    console.log "creating new poll"
+    $scope.editPoll new Poll()
+
   $scope.addAnswer = (index) ->
     $scope.poll.answers.splice index+1, 0,
       text : ''
@@ -124,21 +131,3 @@ angular.module 'voteApp'
       $scope.polls.splice index, 1
     , (error) ->
       console.log "deletePoll Error: #{error}"
-
-###
-  $scope.awesomeThings = []
-
-  $http.get('/api/things').success (awesomeThings) ->
-    $scope.awesomeThings = awesomeThings
-    
-
-  $scope.addThing = ->
-    return if $scope.newThing is ''
-    $http.post '/api/things',
-      name: $scope.newThing
-
-    $scope.newThing = ''
-
-  $scope.deleteThing = (thing) ->
-    $http.delete '/api/things/' + thing._id
-###
