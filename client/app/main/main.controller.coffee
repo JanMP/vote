@@ -49,7 +49,8 @@ angular.module 'voteApp'
 
   $scope.switchToEditor = ->
     if $scope.mayEdit($scope.poll) or $scope.mayCreate()
-      if $scope.poll.creator = '' then $scope.poll.creator = $scope.getCurrentUser()._id
+      console.log "creator: #{$scope.getCurrentUser()._id}"
+      if $scope.poll.creator is '' then $scope.poll.creator = $scope.getCurrentUser()._id
       $scope.showEdit = true
       $scope.showListing = false
       $scope.showBallot = false
