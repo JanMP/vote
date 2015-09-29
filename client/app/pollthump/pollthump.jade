@@ -1,8 +1,11 @@
 div.col-sm-6
   h3 {{poll.title}}: 
   h4 {{poll.question}}
+  .chartContainer
+    canvas.chart(width='200' height='200')
   table.table
     tr(ng-repeat='answer in poll.answers')
+      td.td-letter {{letter($index)}}. 
       td {{answer.text}}
       td.text-right
         strong{{answer.amount}}

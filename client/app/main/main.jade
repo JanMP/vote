@@ -10,9 +10,9 @@ header#banner.hero-unit
   .row
     .col-lg-12
       h1.page-header Polls:
-      button.btn.btn-default.pull-right(ng-click='newPoll()' ng-disabled='!mayCreate()')
-        span.glyphicon.glyphicon-plus
-        |  New Poll
+        button.btn.btn-default.pull-right(ng-click='newPoll()' ng-disabled='!mayCreate()')
+          span.glyphicon.glyphicon-plus
+          |  New Poll
       pollthump(ng-repeat='poll in polls')
 
 .container(ng-show='showBallot')
@@ -51,12 +51,12 @@ header#banner.hero-unit
             .input-group
               input.form-control(type='text' id='answer' ng-model='poll.answers[$index].text')
               span.input-group-btn
-                button.btn.btn-default(type='button' ng-click='deleteAnswer($index)') -
+                button.btn.btn-default(type='button' ng-click='deleteAnswer($index)' ng-disabled='poll.answers.length < 3') -
                 button.btn.btn-default(type='button' ng-click='addAnswer($index)') +
         .form-group
           .col-sm-offset-2.col-sm-10.text-right
-            button.btn.btn-default(ng-click="switchToListing()") Cancel
-            button.btn.btn-default(ng-click="submit()") Ok
+            button.btn.btn-default(type='button' ng-click="switchToListing()") Cancel
+            button.btn.btn-default(type='button' ng-click="submit()") Ok
 
     //
       h1 Ersatztext
